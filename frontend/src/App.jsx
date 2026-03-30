@@ -1,161 +1,87 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import Analytics from './components/Analytics';
+import Presentation from './components/Presentation';
 import './App.css';
 
-function App() {
-  const [text, setText] = useState('');
-  const [result, setResult] = useState(null);
+function MainApp() {
   const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
-  
-  // Theme state
   const [theme, setTheme] = useState('dark');
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const isLoginPage = location.pathname === '/login';
 
-  // Apply theme to document
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Boot redirect logic
+  useEffect(() => {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    if (!isAuth && location.pathname !== '/login') {
+      navigate('/login');
+    }
+  }, [location, navigate]);
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  const startRecording = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("Your browser does not support Speech Recognition.");
-      return;
-    }
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => setIsRecording(true);
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setText((prev) => (prev ? prev + " " + transcript : transcript));
-    };
-    recognition.onerror = () => setIsRecording(false);
-    recognition.onend = () => setIsRecording(false);
-
-    recognition.start();
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!text.trim()) {
-      setError('Please enter some text to analyze.');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setResult(null);
-
-    try {
-      const response = await fetch('http://127.0.0.1:5000/predict', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to reach backend.');
-      }
-
-      const data = await response.json();
-      if (data.error) {
-        setError(data.error);
-      } else {
-        setResult(data);
-        // Add to history
-        setHistory(prev => [{
-            id: Date.now(),
-            textPreview: text.length > 50 ? text.substring(0, 50) + "..." : text,
-            prediction: data.prediction,
-            confidence: data.confidence
-        }, ...prev]);
-      }
-    } catch (err) {
-      setError('Error connecting to the API. Make sure http://127.0.0.1:5000 is running.');
-    } finally {
-      setLoading(false);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    navigate('/login');
   };
 
   return (
-    <div className="container">
-      <header className="header">
-        <div className="header-top">
-          <h1>Fake News Detector</h1>
-          <button className="theme-toggle" onClick={toggleTheme} title="Toggle Dark/Light Mode">
-            {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-        </div>
-        <p>AI-powered fake news analysis using PassiveAggressiveClassifier.</p>
-      </header>
-      
-      <main className="main-content">
-        <form onSubmit={handleSubmit} className="form-container">
-          <textarea
-            className="text-input"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Paste news article content here or use Voice Input..."
-            rows="8"
-          ></textarea>
-          
-          <div className="button-group">
-            <button 
-              type="button" 
-              className={`voice-btn ${isRecording ? 'recording' : ''}`} 
-              onClick={startRecording}
-            >
-              {isRecording ? '🎙️ Listening...' : '🎙️ Voice Input'}
+    <>
+      {!isLoginPage && (
+        <nav className="navbar" style={{
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          padding: '1rem 2rem', 
+          backgroundColor: 'var(--card-bg)',
+          borderBottom: '1px solid var(--input-border)'
+        }}>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            <span style={{ fontWeight: 'bold', fontSize: '1.2rem', color: 'var(--primary-color)' }}>DetectorOS</span>
+            <Link to="/dashboard" style={{ color: 'var(--text-color)', textDecoration: 'none' }}>Dashboard</Link>
+            <Link to="/analytics" style={{ color: 'var(--text-color)', textDecoration: 'none' }}>Analytics</Link>
+            <Link to="/presentation" style={{ color: 'var(--text-color)', textDecoration: 'none' }}>Presentation</Link>
+          </div>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <button className="theme-toggle" onClick={toggleTheme}>
+              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
             </button>
-            <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? 'Analyzing...' : 'Analyze Text'}
-            </button>
+            <button onClick={handleLogout} style={{
+              background: 'transparent', color: 'var(--error-color)', border: 'none', cursor: 'pointer', fontWeight: 'bold'
+            }}>Logout</button>
           </div>
-        </form>
-
-        {error && <div className="error-message">{error}</div>}
-
-        {result && (
-          <div className={`result-card ${result.prediction === 'Fake' ? 'fake' : 'real'}`}>
-            <h2>Prediction: {result.prediction}</h2>
-            <p className="confidence-text"><strong>Confidence:</strong> {result.confidence.toFixed(2)}%</p>
-            {result.explanation ? (
-              <div className="explanation">
-                <strong>Explanation:</strong>
-                <p>{result.explanation}</p>
-              </div>
-            ) : null}
-          </div>
-        )}
-      </main>
-
-      {history.length > 0 && (
-        <section className="history-section">
-          <h3>History</h3>
-          <div className="history-list">
-            {history.map(item => (
-              <div key={item.id} className={`history-card ${item.prediction === 'Fake' ? 'border-fake' : 'border-real'}`}>
-                <div className="history-info">
-                  <span className={`label ${item.prediction === 'Fake' ? 'text-fake' : 'text-real'}`}>{item.prediction}</span>
-                  <span className="confidence-label"> ({item.confidence.toFixed(2)}%)</span>
-                </div>
-                <p className="history-text">"{item.textPreview}"</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        </nav>
       )}
-    </div>
+
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard history={history} setHistory={setHistory} />} />
+          <Route path="/analytics" element={<Analytics history={history} />} />
+          <Route path="/presentation" element={<Presentation />} />
+          <Route path="*" element={<Dashboard history={history} setHistory={setHistory} />} />
+        </Routes>
+      </AnimatePresence>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <MainApp />
+    </Router>
   );
 }
 
