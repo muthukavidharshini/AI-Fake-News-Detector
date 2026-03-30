@@ -1,42 +1,3 @@
-Suggested Project Structure
-ai-fake-news-detector/
-│
-├── backend/                  # Backend server code
-│   ├── app.js                # Main backend application file (Node.js / Flask)
-│   ├── routes/               # API route handlers
-│   │   └── analyze.js        # Route to analyze news/video
-│   ├── controllers/          # Logic for routes
-│   │   └── analyzeController.js
-│   ├── models/               # Database models
-│   │   └── userModel.js
-│   ├── utils/                # Helper functions
-│   │   └── auth.js
-│   ├── package.json           # Node.js dependencies
-│   └── .env                  # Environment variables
-│
-├── frontend/                 # React frontend code
-│   ├── public/
-│   │   └── index.html
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Header.js
-│   │   │   ├── Footer.js
-│   │   │   ├── Login.js
-│   │   │   ├── Register.js
-│   │   │   ├── UploadNews.js
-│   │   │   └── Result.js
-│   │   ├── App.js
-│   │   └── index.js
-│   └── package.json
-│
-├── models/                   # Pretrained AI models (optional)
-│   ├── text_model.h5
-│   └── video_model.h5
-│
-├── README.md                 # Project documentation
-├── .gitignore                # Files to ignore in Git
-└── requirements.txt          # Python dependencies (if using Flask backend)
-Updated README.md
 # AI Fake News Detector
 
 **AI Fake News Detector** is a web application that uses artificial intelligence to detect fake news in videos and articles. It helps users quickly verify the authenticity of news content using advanced AI models.
@@ -83,11 +44,11 @@ Install frontend dependencies
 cd ../frontend
 npm install
 
-Start backend server
+Start the backend server
 
 npm start
 
-Start frontend server
+Start the frontend server
 
 npm start
 
@@ -102,12 +63,11 @@ View the result and confidence score.
 Project Structure
 ai-fake-news-detector/
 │
-├── backend/                  # Backend server code
-├── frontend/                 # React frontend code
-├── models/                   # Pretrained AI models
-├── README.md                 # Project documentation
-├── .gitignore
-└── requirements.txt          # Python dependencies (if using Flask)
+├── frontend/         # React frontend code
+├── backend/          # Backend server code (Node.js/Flask)
+├── models/           # Pretrained AI models
+├── README.md         # Project documentation
+└── .gitignore
 Contributing
 
 Contributions are welcome!
@@ -124,8 +84,6 @@ This project is licensed under the MIT License.
 
 ---
 
-✅ This version is **fully organized** and ready to upload to GitHub.  
+If you want, I can also **enhance it with badges, demo link placeholders, and screenshots** to make it **look professional and eye-catching on GitHub**.  
 
-If you want, I can also **make it look visually attractive with badges, demo link, and screenshots** so your repo will appear **professional and clickable** on GitHub.  
-
-Do you want me to do that?
+Do you want me to do that next?
