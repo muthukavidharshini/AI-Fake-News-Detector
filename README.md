@@ -53,8 +53,7 @@ Start the frontend server
 npm start
 
 Open the application in your browser
-
-http://localhost:3000
+http://localhost:5181/login
 Usage
 Register a new account or log in with existing credentials.
 Upload a news video or paste an article link/text.
