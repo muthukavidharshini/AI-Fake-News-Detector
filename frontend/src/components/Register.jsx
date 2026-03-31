@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-function Login() {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
-
+    setSuccess('');
+    
     if (!username || !password) {
       setError('Please provide both username and password.');
       return;
@@ -21,7 +23,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/login', {
+      const response = await fetch('http://127.0.0.1:5000/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,16 +34,16 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || 'Registration failed');
       }
 
-      // Success
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userId', data.user_id);
-      navigate('/news-check');
+      setSuccess('Registration successful! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
 
     } catch (err) {
-      setError(err.message || 'Error connecting to the API');
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -50,19 +52,19 @@ function Login() {
   return (
     <motion.div 
       className="container flex-center"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
     >
       <div className="login-card result-card" style={{ maxWidth: '400px', width: '100%', margin: 'auto', marginTop: '5rem' }}>
         <h1 style={{ background: 'linear-gradient(to right, #38bdf8, #818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textAlign: 'center' }}>
-          Database Login
+          Register User
         </h1>
         <p style={{ textAlign: 'center', color: 'var(--text-color)', opacity: 0.8, marginBottom: '2rem' }}>
-          Please authenticate to access the Video Extractor.
+          Create a secure account to access the Fake News Video API.
         </p>
 
-        <form onSubmit={handleLogin} className="form-container">
+        <form onSubmit={handleRegister} className="form-container">
           <input
             type="text"
             className="text-input"
@@ -79,18 +81,19 @@ function Login() {
           />
           
           <button type="submit" className="submit-btn" style={{ width: '100%', marginTop: '1rem' }} disabled={loading}>
-            {loading ? 'Authenticating...' : 'Login Securely'}
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 
         {error && <div className="error-message" style={{ marginTop: '1rem' }}>{error}</div>}
-
+        {success && <div className="error-message" style={{ marginTop: '1rem', borderColor: 'var(--real-color)', color: 'var(--real-color)', backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>{success}</div>}
+        
         <p style={{ textAlign: 'center', marginTop: '1.5rem', opacity: 0.8 }}>
-          Need an account? <Link to="/register" style={{ color: 'var(--primary-color)' }}>Register here</Link>
+          Already have an account? <Link to="/login" style={{ color: 'var(--primary-color)' }}>Login here</Link>
         </p>
       </div>
     </motion.div>
   );
 }
 
-export default Login;
+export default Register;
