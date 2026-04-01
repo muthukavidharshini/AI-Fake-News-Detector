@@ -1,0 +1,27 @@
+{
+  "name": "fake-news-dector",
+  "version": "1.0.0",
+  "description": "**AI Fake News Detector** is a web application that uses artificial intelligence to detect fake news in videos and articles. It helps users quickly verify the authenticity of news content using advanced AI models.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muthukavidharshini/fake-news-detector.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/muthukavidharshini/fake-news-detector/issues"
+  },
+  "homepage": "https://github.com/muthukavidharshini/fake-news-detector#readme",
+  "dependencies": {
+    "axios": "^1.14.0",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}
