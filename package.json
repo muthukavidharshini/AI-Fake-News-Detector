@@ -4,7 +4,10 @@
   "description": "**AI Fake News Detector** is a web application that uses artificial intelligence to detect fake news in videos and articles. It helps users quickly verify the authenticity of news content using advanced AI models.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm run dev --prefix frontend",
+    "server": "cd backend && ..\\.venv\\Scripts\\python.exe app.py",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -23,5 +26,8 @@
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

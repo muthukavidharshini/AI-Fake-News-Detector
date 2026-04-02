@@ -5,6 +5,8 @@ import { AnimatePresence } from 'framer-motion';
 import Register from './components/Register';
 import Login from './components/Login';
 import VideoUpload from './components/VideoUpload';
+import ImageUpload from './components/ImageUpload';
+import AudioUpload from './components/AudioUpload';
 import Header from './components/Header';
 import NewsInput from './components/NewsInput';
 import './App.css';
@@ -50,6 +52,14 @@ function MainApp() {
           <Route 
             path="/video-upload" 
             element={isAuthenticated ? <VideoUpload /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/image-upload" 
+            element={isAuthenticated ? <ImageUpload /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/audio-upload" 
+            element={isAuthenticated ? <AudioUpload /> : <Navigate to="/login" />} 
           />
           <Route 
             path="/news-check" 

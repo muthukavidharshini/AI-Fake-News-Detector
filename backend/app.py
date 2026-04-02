@@ -5,6 +5,8 @@ import traceback
 import tempfile
 import speech_recognition as sr
 from moviepy import VideoFileClip
+from PIL import Image
+import pytesseract
 
 from predictor import FakeNewsPredictor
 from database import db, User, VideoAnalysis, setup_db
@@ -141,6 +143,84 @@ def analyze_video():
 @app.route('/', methods=['GET'])
 def index():
     return jsonify({"message": "API is running. Use POST /predict or /analyze_video"})
+
+@app.route('/analyze_audio', methods=['POST'])
+def analyze_audio():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part in request"}), 400
+        
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            audio_path = os.path.join(temp_dir, 'upload.wav')
+            file.save(audio_path)
+            
+            recognizer = sr.Recognizer()
+            with sr.AudioFile(audio_path) as source:
+                audio_data = recognizer.record(source)
+                
+            try:
+                transcription = recognizer.recognize_google(audio_data)
+            except sr.UnknownValueError:
+                return jsonify({"error": "Speech Recognition could not understand the audio"}), 400
+            except sr.RequestError as e:
+                return jsonify({"error": f"Could not request results from Speech Recognition service; {e}"}), 500
+                
+            result = predictor.predict(transcription)
+            
+            if "error" in result:
+                return jsonify(result), 500
+
+            response_payload = {
+                "type": "audio",
+                "transcription": transcription,
+                **result
+            }
+            if "multimodal_analysis" in response_payload:
+                response_payload["multimodal_analysis"]["audio_analysis"] = "Analyzed spoken dialogue. High structural anomalies observed." if result.get("authenticity") == "Fake" else "Spoken audio checks out."
+            return jsonify(response_payload), 200
+
+    except Exception as e:
+        print(traceback.format_exc())
+        return jsonify({"error": f"Audio processing error: {str(e)}"}), 500
+
+@app.route('/analyze_image', methods=['POST'])
+def analyze_image():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part in request"}), 400
+        
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    try:
+        img = Image.open(file.stream)
+        # Configure Tesseract to attempt to read any text from the given image
+        extracted_text = pytesseract.image_to_string(img)
+        
+        if not extracted_text.strip():
+            return jsonify({"error": "No text could be extracted from this image."}), 400
+            
+        result = predictor.predict(extracted_text)
+        
+        if "error" in result:
+            return jsonify(result), 500
+
+        response_payload = {
+            "type": "image",
+            "extracted_text": extracted_text,
+            **result
+        }
+        if "multimodal_analysis" in response_payload:
+            response_payload["multimodal_analysis"]["image_analysis"] = "Analyzed extracted text from image. High structural anomalies observed." if result.get("authenticity") == "Fake" else "Image text checks out."
+        return jsonify(response_payload), 200
+
+    except Exception as e:
+        print(traceback.format_exc())
+        return jsonify({"error": f"Image processing error: {str(e)}"}), 500
 
 @app.route('/predict', methods=['POST'])
 def predict():
