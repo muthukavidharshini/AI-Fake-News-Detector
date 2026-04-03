@@ -1,88 +1,150 @@
 # AI Fake News Detector
 
-**AI Fake News Detector** is a web application that uses artificial intelligence to detect fake news in videos and articles. It helps users quickly verify the authenticity of news content using advanced AI models.
+## Description
+The AI Fake News Detector is a web application that analyzes news content—including **text, images, audio, and videos**—to determine whether it is **Real**, **Fake**, or **Possibly Misleading**.  
+It uses **AI multimodal analysis**, **automated summarization**, and **source verification** to provide clear, structured, and actionable results.
+
+👉 Supports **Text 📝, Image 🖼️, Audio 🎙️, and Video 🎥 analysis using AI**
 
 ---
 
 ## Features
 
-- Detect fake news from videos and text/articles  
-- Secure user registration and login  
-- Real-time analysis with confidence score  
-- Interactive and user-friendly interface  
-- Multi-language support (optional)  
+### 🔹 Core Features
+- User Registration & Login: Secure authentication with token-based login.
+- News Submission: Submit news articles or upload **text, image, audio, and video** content.
+- Media Upload & Preview: Preview images, audio, and videos before checking.
+- Multimodal AI Analysis: Combines **text, image, audio, and video analysis**.
+- Multi-language Support: Detects and translates news from multiple languages.
+- News Categorization & Filtering: Categories like Politics, Health, Tech, Entertainment, Science.
+- Automated Summarization: Generates a short summary of the news.
+- Tone & Emotion Detection: Detects fear, anger, sensationalism, or misleading emotions.
+- Suggested Actions: Recommends whether to verify, ignore, or share with caution.
+- Fact-check References: Provides links to credible sources.
 
 ---
 
-## Technologies Used
-
-- **Frontend:** React.js, HTML, CSS, JavaScript  
-- **Backend:** Node.js / Python Flask  
-- **Database:** MongoDB / Firebase  
-- **AI Models:** NLP for text analysis, CNN/LSTM for video analysis  
-- **Authentication:** JWT / Firebase Auth  
+### 🔹 Multimodal Analysis Features
+- 📝 **Text Analysis**: Analyze news articles, headlines, and written content.
+- 🖼️ **Image Analysis**: Detect manipulated images, OCR text extraction, and visual inconsistencies.
+- 🎙️ **Audio Analysis**: Transcribe and analyze speech for misinformation or deepfake audio.
+- 🎥 **Video Analysis**: Detect deepfake videos and analyze frames for suspicious content.
 
 ---
 
-## Installation
+### 🔹 Advanced Features
+- Trending Fake News Alerts: Notifies users about trending fake news.
+- Error Handling: Handles invalid input or corrupted media gracefully.
+- Source Reliability Score: Evaluates trustworthiness of news sources.
+- Cross-modal Verification: Combines multiple media types for higher accuracy.
 
-1. **Clone the repository**  
-   ```bash
-   git clone https://github.com/yourusername/fake-news-video-app.git
+---
 
-Navigate to the project directory
+## 🧠 Multimodal AI Capability
 
-cd fake-news-video-app
+This project uses advanced AI models to analyze multiple types of content:
 
-Install backend dependencies
+- **Text** → NLP-based fake news detection  
+- **Image** → OCR + manipulation detection  
+- **Audio** → Speech-to-text + sentiment analysis  
+- **Video** → Frame extraction + deepfake detection  
 
+---
+
+## Tech Stack
+- Frontend: React.js, HTML, CSS, Tailwind
+- Backend: Node.js, Express.js
+- Database: MongoDB
+- AI & NLP: OpenAI / Antigravity API
+- Authentication: JWT-based token system
+
+---
+
+## Installation & Setup
+
+### Clone the repository
+```bash
+git clone https://github.com/yourusername/fake-news-detector.git
+cd fake-news-detector
+Backend Setup
 cd backend
 npm install
-
-Install frontend dependencies
-
-cd ../frontend
+npm start
+Frontend Setup
+cd frontend
 npm install
-
-Start the backend server
-
 npm start
-
-Start the frontend server
-
-npm start
-
-Open the application in your browser
-http://localhost:5181/login
+🌐 Open the Application
+http://localhost:5173/news-check
 Usage
-Register a new account or log in with existing credentials.
-Upload a news video or paste an article link/text.
-Click Analyze to get AI-based fake news detection results.
-View the result and confidence score.
-Project Structure
-ai-fake-news-detector/
+Register/Login
+Go to News Check page
+Enter Title, Content, Source, URL
+Upload image, audio, or video (optional)
+Select category or let AI auto-detect
+Click Check News
+📊 Example Output
+{
+  "authenticity": "Fake",
+  "confidence": "95%",
+  "explanation": "The claim that lemon juice cures COVID-19 is false.",
+  "suggested_action": "Do not share; verify from official sources",
+  "tone_emotion": "Fear, sensationalism",
+  "category": "Health",
+  "summary": "False claim about lemon juice curing COVID-19",
+  "source_reliability": "Low",
+  "multimodal_analysis": {
+    "text_analysis": "",
+    "image_analysis": "",
+    "audio_analysis": "",
+    "video_analysis": ""
+  }
+}
+📁 Folder Structure
+fake-news-detector/
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   └── server.js
 │
-├── frontend/         # React frontend code
-├── backend/          # Backend server code (Node.js/Flask)
-├── models/           # Pretrained AI models
-├── README.md         # Project documentation
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── App.js
+│   └── package.json
+│
+├── README.md
 └── .gitignore
-Contributing
+🚀 Future Enhancements
+Browser extension for instant news verification
+Gamification and leaderboards
+AI feedback learning system
+Real-time social media monitoring
+📜 License
 
-Contributions are welcome!
+MIT License © 2026 – Your Name
 
-Fork the repository.
-Create a new branch: git checkout -b feature/your-feature.
-Commit your changes: git commit -m "Add your feature".
-Push to the branch: git push origin feature/your-feature.
-Open a Pull Request.
-License
-
-This project is licensed under the MIT License.
+✅ Local News Check page: http://localhost:5173/news-check
 
 
 ---
 
-If you want, I can also **enhance it with badges, demo link placeholders, and screenshots** to make it **look professional and eye-catching on GitHub**.  
+## 🎯 What I improved
 
-Do you want me to do that next?
+✔ Added **Audio 🎙️ feature**  
+✔ Clearly separated **Multimodal section**  
+✔ Improved **professional formatting**  
+✔ Fixed **structure & readability**  
+✔ Added **clear feature highlighting**  
+
+---
+
+## 🔥 If you want next level
+I can:
+- ⭐ Add **GitHub badges (build, license, AI)**
+- 🖼️ Add **screenshots section**
+- 📊 Make it **portfolio-level README**
+
+Just tell me 👍
